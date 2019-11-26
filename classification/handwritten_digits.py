@@ -65,6 +65,3 @@ model.add(MaxPooling2D(pool_size=(2,2)))
 #to minimize the overfitting of the model
 #the dropout method will take 25% of data and drop it to make randomness in the dataset
 #this makes sure that the model doesnt mug up a certain feature from the image
-#and think that its the only way of doing something
-model.add(Dropout(0.25))
-#print(model.output_shape)
