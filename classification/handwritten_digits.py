@@ -20,6 +20,8 @@ from keras.datasets import mnist
 pixel_width = 28
 pixel_height = 28
 num_of_classes = 10
+batch_size = 32
+epochs = 10
 
 """
 num_samples here deals with the color of the image 
@@ -30,15 +32,18 @@ since we have grayscale so the num_sample will have 1
 
 """
 returns 2 tuples
-feature_train, feature_test->uint8 array of grayscale image data with shape(num_samples,28,28)
-labels_train, labels_test->uint8 array of digit labels(ints in 0-9) with shape(num_samples)
+feature_train, feature_test->uint8 array of grayscale image data with 
+shape(num_samples,28,28) labels_train, labels_test->uint8 array of 
+digit labels(ints in 0-9) with shape(num_samples)
 """
 
 #to add depth in the images as CNN model requires depth for the images
-features_train = features_train.reshape(features_train.shape[0], pixel_width, pixel_height, 1)
+features_train = features_train.reshape(features_train.shape[0],
+                                        pixel_width, pixel_height, 1)
 features_test = features_test.reshape(features_test.shape[0], pixel_width, pixel_height, 1)
 
-#CNN model requires these three inputs so it says that all the images have the same dimentions
+#CNN model requires these three inputs so it 
+#says that all the images have the same dimentions
 input_shape = (pixel_width, pixel_height, 1)
 
 #model takes values in the format of float only
@@ -68,5 +73,25 @@ model.add(MaxPooling2D(pool_size=(2,2)))
 #and think that its the only way of doing something
 model.add(Dropout(0.25))
 #print(model.output_shape)
+#it will flatten the matrix into a single dimentional vector to be feeded to NN
 model.add(Flatten())
 #print(model.output_shape)
+#this will add the hidden layer with 128 nodes
+model.add(Dense(128, activation='relu'))
+#print(model.output_shape)
+#this is the final output layer with 10 nodes for 10 digits
+model.add(Dense(num_of_classes, activation='softmax'))
+#print(model.output_shape)
+#metrics will tell how accurate our model is and by default it will call binary_accuracy
+model.compile(loss=keras.losses.categorical_crossentropy,
+              optimizer=keras.optimizers.Adadelta(),
+              metrics=['accuracy'])
+
+model.fit(features_train, labels_train, 
+          batch_size=batch_size,
+          epochs=epochs,
+          verbose=1,
+          validation_data=(features_test, labels_test))
+
+score = model.evaluate(features_test, labels_test, verbose=0)
+
