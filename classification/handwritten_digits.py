@@ -68,3 +68,5 @@ model.add(MaxPooling2D(pool_size=(2,2)))
 #and think that its the only way of doing something
 model.add(Dropout(0.25))
 #print(model.output_shape)
+model.add(Flatten())
+#print(model.output_shape)
