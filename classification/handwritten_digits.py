@@ -95,3 +95,5 @@ model.fit(features_train, labels_train,
 
 score = model.evaluate(features_test, labels_test, verbose=0)
 
+model.save('./handwritten_digits_CNN_model.h5')
+
