@@ -95,5 +95,12 @@ model.fit(features_train, labels_train,
 
 score = model.evaluate(features_test, labels_test, verbose=0)
 
+#Save the model
+# serialize model to JSON
+model_json = model.to_json()
+with open("model.json", "w") as json_file:
+    json_file.write(model_json)
+
+# serialize weights to HDF5
 model.save('./handwritten_digits_CNN_model.h5')
 
